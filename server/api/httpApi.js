@@ -10,22 +10,16 @@
 const _ = require('underscore');
 const q = require('q');
 
+const mongo = require('../dao/mongo');
+
 let api = {};
 
 api.list = () => {
-
+	return mongo.list();
 }
 
 api.create = (newTodo) => {
-
-}
-
-api.remove = (id) => {
-
-}
-
-api.update = (id, newTodo) => {
-
+	return mongo.create(newTodo);
 }
 
 module.exports = api;
