@@ -31,15 +31,14 @@ export default class HomeController {
 		let Book = Model("todo");
 		let todo = new Book({
 			title: this.newTodo,
-			author: 'htf',
-			time: new Date(),
-			completed: true
+			completed: false
 		});
-		todo.save()
-		// .then((result) => {
-		// 	this.todos.push(result);
-		// 	this.newTodo = '';
-		// })
+		todo.save().then((result) => {
+			console.log(result);
+			this.todos.push(result);
+			console.log(this.todos);
+			this.newTodo = '';
+		})
 	}
 
 	// add() {		

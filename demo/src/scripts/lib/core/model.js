@@ -26,9 +26,17 @@ class someModel {
 	}
 
 	save() {
+
+		let defer = Promise.defer();
+
 		this.data.modelName = someModel.modelName;
-		post(url, this.data).then(() => {
-			alert('create model successful');
+		post(url, this.data).then((result) => {
+			defer.resolve(result);
+		}).catch((error) => {
+			defer.reject(error);
 		})
+
+		return defer.promise;
+
 	}
 }
