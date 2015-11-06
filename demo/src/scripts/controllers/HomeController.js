@@ -1,5 +1,7 @@
 import Todo from '../models/Todo';
 
+import Model from '../lib/core/model';
+
 export default class HomeController {
 
 	/*
@@ -25,18 +27,33 @@ export default class HomeController {
 	    }, true);	  
 	}
 
-	add() {		
-		if(!this.newTodo) {
-			return;
-		}
-		this.pending = true;
-    	this.todo.create(this.newTodo).then((result) => {
-    		this.todos.push(result);
-			this.newTodo = '';
-		}).finally(() => {
-			this.pending = false;
+	add() {
+		let Book = Model("todo");
+		let todo = new Book({
+			title: this.newTodo,
+			author: 'htf',
+			time: new Date(),
+			completed: true
 		});
+		todo.save()
+		// .then((result) => {
+		// 	this.todos.push(result);
+		// 	this.newTodo = '';
+		// })
 	}
+
+	// add() {		
+	// 	if(!this.newTodo) {
+	// 		return;
+	// 	}
+	// 	this.pending = true;
+ //    	this.todo.create(this.newTodo).then((result) => {
+ //    		this.todos.push(result);
+	// 		this.newTodo = '';
+	// 	}).finally(() => {
+	// 		this.pending = false;
+	// 	});
+	// }
 
 	// remove(todo) {
 	// 	this.todo.delete(todo.todoId).then((result) => {

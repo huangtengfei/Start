@@ -22,6 +22,10 @@ api.create = (newTodo) => {
 	return mongo.create(newTodo);
 }
 
+api.add = (modelName, modelData) => {
+	return mongo.add(modelName, modelData);
+}
+
 module.exports = api;
 
 

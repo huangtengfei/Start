@@ -28,6 +28,14 @@ function routes(app) {
 		}	
 	})
 
+	app.post('/api/models', (req, res) => {
+		let model = req.body;
+		console.log(model);
+		api.add(model.modelName, model.modelData).then(() => {
+			res.end('this is end!');
+		})
+	})
+
 }
 
 module.exports = routes;

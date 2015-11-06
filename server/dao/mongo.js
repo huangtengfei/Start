@@ -11,6 +11,7 @@
 const mongoose = require('mongoose');
 const q = require('q');
 const todoSchema = require('../model/schemas').todoSchema;
+const util = require('../util/util');
 
 mongoose.connect('mongodb://localhost/start');
 
@@ -46,6 +47,29 @@ mongo.create = (model) => {
 	})
 
 	return defer.promise;
+}
+
+mongo.add = (modelName, modelData) => {
+
+	let defer = q.defer();
+	let Model;
+
+	if(mongoose.models[modelName]){
+		Model = mongoose.model(modelName);
+	}else {
+		Model = mongoose.model(modelName, util.getSchema(modelData));
+	}
+	let model = new Model(modelData);
+
+	model.save((err, doc) => {
+		if(err) {
+			defer.reject(err);
+		}
+		defer.resolve(doc);
+	})
+
+	return defer.promise;
+
 }
 
 module.exports = mongo;

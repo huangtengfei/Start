@@ -5,6 +5,15 @@
  * Desc: Start javascript sdk
  */
 
-export default class Model {
+import {get, post} from '../base/http';
+
+export default function Model(model) {
 	
+	let url = 'http://localhost\\:8000/';
+	let data = {model: model};
+
+	post(url, data).then(() => {
+		alert('create model successful');
+	})
+
 }
