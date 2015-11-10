@@ -8,60 +8,18 @@
 
 'use strict';
 
-const mongoose = require('mongoose');
 const q = require('q');
-const todoSchema = require('../model/schemas').todoSchema;
-const util = require('../util/util');
 
-mongoose.connect('mongodb://localhost/start');
-
-let Todo = mongoose.model('todo', todoSchema);
+const db = require('monk')('localhost/start');
 
 let mongo = {};
 
-mongo.list = () => {
+mongo.create = (modelName, modelData) => {
 
 	let defer = q.defer();
+	let model = db.get(modelName);
 
-	Todo.find((err, doc) => {
-		if(err) {
-			defer.reject(err);
-		}
-		defer.resolve(doc);
-	})
-
-	return defer.promise;
-}
-
-mongo.create = (model) => {
-
-	let defer = q.defer();
-
-	let todo = new Todo(model);
-
-	todo.save((err, doc) => {
-		if(err) {
-			defer.reject(err);
-		}
-		defer.resolve(doc);
-	})
-
-	return defer.promise;
-}
-
-mongo.add = (modelName, modelData) => {
-
-	let defer = q.defer();
-	let Model;
-
-	if(mongoose.models[modelName]){
-		Model = mongoose.model(modelName);
-	}else {
-		Model = mongoose.model(modelName, util.getSchema(modelData));
-	}
-	let model = new Model(modelData);
-
-	model.save((err, doc) => {
+	model.insert(modelData, (err, doc) => {
 		if(err) {
 			defer.reject(err);
 		}
@@ -72,12 +30,12 @@ mongo.add = (modelName, modelData) => {
 
 }
 
-mongo.getAll = (model, params) => {
+mongo.list = (modelName, params) => {
 
 	let defer = q.defer();
-	let Model = mongoose.model(model);
-	
-	Model.find((err, doc) => {
+	let model = db.get(modelName);
+
+	model.find({}, {}, (err, doc) => {
 		if(err) {
 			defer.reject(err);
 		}

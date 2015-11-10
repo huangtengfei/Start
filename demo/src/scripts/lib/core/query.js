@@ -1,4 +1,3 @@
-'use strict';
 
 /**
  * author: huangtengfei
@@ -11,7 +10,6 @@ import {get, post} from '../base/http';
 
 const baseUrl = 'http://localhost:8000/api/models/';
 
-
 export default class Query {
 
 	constructor(model) {
@@ -23,7 +21,7 @@ export default class Query {
 			_apiKey:'a12sd43fdf45',
 			_apiId: 'k34asdg355d4',
 			_method: 'GET'
-		}
+		};
 		return post(baseUrl + this.model, params);
 	}
 

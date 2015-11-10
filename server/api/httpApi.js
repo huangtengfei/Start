@@ -1,36 +1,24 @@
-/**
- * author: huangtengfei
- * Date: 15-11-04
- * Time: 19:55
- * Desc: Start cloud sdk
- */
-
 'use strict';
-
-const _ = require('underscore');
-const q = require('q');
 
 const mongo = require('../dao/mongo');
 
 let api = {};
 
-api.list = () => {
-	return mongo.list();
-}
+api.models = (req, res) => {
 
-api.create = (newTodo) => {
-	return mongo.create(newTodo);
-}
+	let params = req.body;
+	let modelName = req.params.model;
 
-api.add = (model, modelData) => {
-	return mongo.add(model, modelData);
-}
+	if(params._method && params._method === 'GET'){
+		mongo.list(modelName, params).then((result) => {
+			res.send(JSON.stringify(result));
+		})
+	}else {
+		mongo.create(modelName, params.modelData).then((result) => {
+			res.send(JSON.stringify(result));
+		})
+	}
 
-api.getAll = (model, params) => {
-	return mongo.getAll(model, params);
-}
+} 
 
-module.exports = api;
-
-
-
+module.exports = api; 

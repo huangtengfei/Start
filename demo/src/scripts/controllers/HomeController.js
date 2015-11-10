@@ -1,6 +1,5 @@
 import Todo from '../models/Todo';
 
-// import Model from '../lib/core/model';
 import Start from '../lib/index';
 
 export default class HomeController {
@@ -21,10 +20,8 @@ export default class HomeController {
 
 		let query = new Start.Query("todo");
 		query.find().then((result) => {
-			console.log('------------receive-----------');
-			console.log(result);
-			this.todos = JSON.parse(result) || []
-		})
+			this.todos = JSON.parse(result);
+		});
 
 	    // use $scope just for use $watch
 	    $scope.$watch('vm.todos', () => {
@@ -48,50 +45,9 @@ export default class HomeController {
 			this.todos.push(JSON.parse(result));		
 			this.newTodo = '';
 			this.scope.$apply();
-		});
-
-		// todo.save(null, {
-		// 	success: (data) => {
-		// 		this.todos.push(JSON.parse(data));
-		// 	},
-		// 	error: (data, err) => {
-		// 		alert(err);
-		// 	}
-		// })		
+		});	
 	}
 
-	// add() {		
-	// 	if(!this.newTodo) {
-	// 		return;
-	// 	}
-	// 	this.pending = true;
- //    	this.todo.create(this.newTodo).then((result) => {
- //    		this.todos.push(result);
-	// 		this.newTodo = '';
-	// 	}).finally(() => {
-	// 		this.pending = false;
-	// 	});
-	// }
-
-	// remove(todo) {
-	// 	this.todo.delete(todo.todoId).then((result) => {
-	// 		this.todos.splice(this.todos.indexOf(todo), 1);
-	// 	});
-	// }
-
-	// toggleCompleted(todo) {
-	// 	this.todo.update(todo).then(() => {
-	// 		// if success, do nothing
-	// 	}, () => {
-	// 		todo.completed = !todo.completed;	// if error, change todo's status to previous
-	// 	});
-	// }
-
-	// clearCompleted() {
-	// 	this.todo.clear(this.todos).then((result) => {
-	// 		this.todos = result;
-	// 	});
-	// }
 
 	// use status change selected style, use statusFilter filter todos in the view 
 	filterTodo(status) {
