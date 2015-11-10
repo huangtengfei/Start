@@ -1,6 +1,7 @@
 import Todo from '../models/Todo';
 
-import Model from '../lib/core/model';
+// import Model from '../lib/core/model';
+import Start from '../lib/index';
 
 export default class HomeController {
 
@@ -11,15 +12,19 @@ export default class HomeController {
 	/*@ngInject*/
 	constructor($scope, $filter, $q, TodoFactory) {
 
-		this.todo = new Todo($q, TodoFactory);
+		// this.todo = new Todo($q, TodoFactory);
 
 		this.todos = [];
 		this.uncompleted = 0;
 		this.status = 'all';
+		this.scope = $scope;
 
-		this.todo.list().then((result) => {
-			this.todos = result;	
-		});
+		let query = new Start.Query("todo");
+		query.find().then((result) => {
+			console.log('------------receive-----------');
+			console.log(result);
+			this.todos = JSON.parse(result) || []
+		})
 
 	    // use $scope just for use $watch
 	    $scope.$watch('vm.todos', () => {
@@ -28,17 +33,31 @@ export default class HomeController {
 	}
 
 	add() {
-		let Book = Model("todo");
+
+		if(!this.newTodo) {
+			return;
+		}
+
+		let Book = Start.Model("todo");
 		let todo = new Book({
 			title: this.newTodo,
 			completed: false
 		});
+
 		todo.save().then((result) => {
-			console.log(result);
-			this.todos.push(result);
-			console.log(this.todos);
+			this.todos.push(JSON.parse(result));		
 			this.newTodo = '';
-		})
+			this.scope.$apply();
+		});
+
+		// todo.save(null, {
+		// 	success: (data) => {
+		// 		this.todos.push(JSON.parse(data));
+		// 	},
+		// 	error: (data, err) => {
+		// 		alert(err);
+		// 	}
+		// })		
 	}
 
 	// add() {		

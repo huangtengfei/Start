@@ -7,7 +7,7 @@
 
 import {get, post} from '../base/http';
 
-const url = 'http://localhost:8000/api/models';
+const url = 'http://localhost:8000/api/models/';
 
 export default function Model(model) {
 
@@ -20,23 +20,15 @@ export default function Model(model) {
 
 class someModel {
 
-	constructor(opts) {
+	constructor(initData) {
 		this.data = {};
-		this.data.modelData = opts;
+		this.data.modelData = initData;
 	}
 
-	save() {
+	save(optsData) {
 
-		let defer = Promise.defer();
-
-		this.data.modelName = someModel.modelName;
-		post(url, this.data).then((result) => {
-			defer.resolve(result);
-		}).catch((error) => {
-			defer.reject(error);
-		})
-
-		return defer.promise;
+		this.data.modelData = optsData || this.data.modelData;
+		return post(url + someModel.modelName, this.data);
 
 	}
 }

@@ -72,4 +72,20 @@ mongo.add = (modelName, modelData) => {
 
 }
 
+mongo.getAll = (model, params) => {
+
+	let defer = q.defer();
+	let Model = mongoose.model(model);
+	
+	Model.find((err, doc) => {
+		if(err) {
+			defer.reject(err);
+		}
+		defer.resolve(doc);
+	})
+
+	return defer.promise;
+
+}
+
 module.exports = mongo;

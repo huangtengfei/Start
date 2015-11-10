@@ -5,16 +5,39 @@
  * Desc: Start javascript sdk
  */
 
- function get(url) {
- 	return http(url, 'GET', null);
+ function get(url, params) {
+ 	return http(url, 'GET');
  }
 
- function post(uri,data){
+ function post(uri, data){
 
     return http(uri, 'POST', JSON.stringify(data) || null, {
         "Content-type":"application/json"
     });
 }
+
+// function http(url, method, data, headers) {
+
+// 	return new Promise(function(resolve, reject) {
+// 		let xhr = new XMLHttpRequest();
+// 		xhr.open(method, url, true);
+// 		if(headers) {
+// 			for(let p in headers) {
+// 				xhr.setRequestHeader(p, headers[p]);
+// 			}
+// 		}
+// 		xhr.onreadystatechange = () => {
+// 			if(xhr.readyState === 4) {
+// 				if(String(xhr.status).match(/^2\d\d$/)){
+// 					resolve(xhr.responseText);
+// 				}else {
+// 					reject(xhr);
+// 				}
+// 			}
+// 		}
+// 		xhr.send(data);
+// 	})
+// }
 
 function http(url, method, data, headers) {
 
@@ -36,6 +59,7 @@ function http(url, method, data, headers) {
 			}
 		}
 	}
+	
 	xhr.send(data);
 
 	return defer.promise;

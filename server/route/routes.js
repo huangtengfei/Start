@@ -28,12 +28,20 @@ function routes(app) {
 		}	
 	})
 
-	app.post('/api/models', (req, res) => {
-		let model = req.body;
-		console.log(model);
-		api.add(model.modelName, model.modelData).then((result) => {
-			res.send(result);
-		})
+	app.post('/api/models/:model', (req, res) => {
+
+		let params = req.body;
+		let model = req.params.model;
+
+		if(params._method && params._method === 'GET'){
+			api.getAll(model, params).then((result) => {
+				res.send(JSON.stringify(result));
+			})
+		}else {
+			api.add(model, params.modelData).then((result) => {
+				res.send(JSON.stringify(result));
+			})
+		}
 	})
 
 }
