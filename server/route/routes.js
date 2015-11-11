@@ -7,11 +7,15 @@
 
 'use strict';
 
-const api = require('../api/httpApi');
+const modelApi = require('../api/modelApi');
+const appApi = require('../api/appApi');
 
 function routes(app) {
 
-	app.post('/api/models/:model', api.models);
+	app.post('/api/models/:model', modelApi.models);
+
+	app.post('/api/apps/init', appApi.init);
+	app.post('/api/apps/create', appApi.create);
 
 }
 

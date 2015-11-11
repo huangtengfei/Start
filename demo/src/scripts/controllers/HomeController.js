@@ -18,6 +18,8 @@ export default class HomeController {
 		this.status = 'all';
 		this.scope = $scope;
 
+		Start.init('5643009ef86efc4c2ebbd304');
+
 		let query = new Start.Query("todo");
 		query.find().then((result) => {
 			this.todos = JSON.parse(result);

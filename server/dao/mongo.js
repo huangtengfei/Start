@@ -14,6 +14,38 @@ const db = require('monk')('localhost/start');
 
 let mongo = {};
 
+mongo.initApp = (params) => {
+
+	let defer = q.defer();
+	let model = db.get('app');
+
+	model.findOne({_id: params.appid}, {}, (err, doc) => {
+		if(err) {
+			defer.reject(err);
+		}
+		defer.resolve(doc);
+	})
+
+	return defer.promise;
+
+}
+
+mongo.createApp = (appData) => {
+
+	let defer = q.defer();
+	let model = db.get('app');
+
+	model.insert(appData, (err, doc) => {
+		if(err) {
+			defer.reject(err);
+		}
+		defer.resolve(doc);
+	})
+
+	return defer.promise;
+
+}
+
 mongo.create = (modelName, modelData) => {
 
 	let defer = q.defer();

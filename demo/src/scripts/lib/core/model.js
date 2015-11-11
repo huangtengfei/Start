@@ -31,4 +31,5 @@ class someModel {
 		return post(url + someModel.modelName, this.data);
 
 	}
+	
 }

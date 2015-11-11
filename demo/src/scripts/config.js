@@ -11,8 +11,10 @@ export default function($urlRouterProvider, $stateProvider){
 			controller: 'HomeController',	
 			controllerAs: 'vm' // use controllerAs with vm
 		})
-		.state('Archive', {
-			url: '/archive',
-			templateUrl: 'templates/archive.html'
+		.state('App', {
+			url: '/app',
+			templateUrl: 'templates/app.html',
+			controller: 'AppController',
+			controllerAs: 'vm'
 		});
 }
