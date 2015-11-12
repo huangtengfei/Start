@@ -1,3 +1,6 @@
-demo/build/
-demo/node_modules/
-server/node_modules/
+web/demo/build/
+web/demo/node_modules/
+web/manage/build/
+web/manage/node_modules/
+server/cloud/node_modules/
+server/manage/node_modules/
