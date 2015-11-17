@@ -12,14 +12,13 @@ const baseUrl = 'http://localhost:8000/api/models/';
 
 export default class Query {
 
-	constructor(model) {
+	constructor(scope, model) {
+		this.scope = scope;
 		this.model = model;
 	}
 
 	find() {
 		let params = {		
-			_apiKey:'a12sd43fdf45',
-			_apiId: 'k34asdg355d4',
 			_method: 'GET'
 		};
 		return post(baseUrl + this.model, params);

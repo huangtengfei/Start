@@ -8,13 +8,14 @@ api.models = (req, res) => {
 
 	let params = req.body;
 	let modelName = req.params.model;
+	let appKey = params._appKey;
 
 	if(params._method && params._method === 'GET'){
-		mongo.list(modelName, params).then((result) => {
+		mongo.list(appKey, modelName, params).then((result) => {
 			res.send(JSON.stringify(result));
 		})
 	}else {
-		mongo.create(modelName, params.modelData).then((result) => {
+		mongo.create(appKey, modelName, params.modelData).then((result) => {
 			res.send(JSON.stringify(result));
 		})
 	}

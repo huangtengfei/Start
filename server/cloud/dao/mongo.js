@@ -9,65 +9,63 @@
 'use strict';
 
 const q = require('q');
+const dbUrl = 'localhost/';
 
-const db = require('monk')('localhost/start');
+let db;
 
 let mongo = {};
 
-mongo.initApp = (params) => {
+mongo.create = (appKey, modelName, modelData) => {
 
 	let defer = q.defer();
+
+	initDb(appKey).then((result) => {
+
+		db = require('monk')(dbUrl + result.appName);
+		let model = db.get(modelName);
+
+		model.insert(modelData, (err, doc) => {
+			if(err) {
+				defer.reject(err);
+			}
+			defer.resolve(doc);
+		})
+
+	})
+
+	return defer.promise;
+
+}
+
+mongo.list = (appKey, modelName, params) => {
+
+	let defer = q.defer();
+	
+	initDb(appKey).then((result) => {
+
+		db = require('monk')(dbUrl + result.appName);
+		let model = db.get(modelName);
+
+		model.find({}, {}, (err, doc) => {
+			if(err) {
+				defer.reject(err);
+			}
+			defer.resolve(doc);
+		})
+
+	})
+
+	return defer.promise;
+
+}
+
+function initDb(appKey) {
+
+	let defer = q.defer();
+	db = require('monk')('localhost/start');
 	let model = db.get('app');
 
-	model.findOne({_id: params.appid}, {}, (err, doc) => {
-		if(err) {
-			defer.reject(err);
-		}
-		defer.resolve(doc);
-	})
-
-	return defer.promise;
-
-}
-
-mongo.createApp = (appData) => {
-
-	let defer = q.defer();
-	let model = db.get('app');
-
-	model.insert(appData, (err, doc) => {
-		if(err) {
-			defer.reject(err);
-		}
-		defer.resolve(doc);
-	})
-
-	return defer.promise;
-
-}
-
-mongo.create = (modelName, modelData) => {
-
-	let defer = q.defer();
-	let model = db.get(modelName);
-
-	model.insert(modelData, (err, doc) => {
-		if(err) {
-			defer.reject(err);
-		}
-		defer.resolve(doc);
-	})
-
-	return defer.promise;
-
-}
-
-mongo.list = (modelName, params) => {
-
-	let defer = q.defer();
-	let model = db.get(modelName);
-
-	model.find({}, {}, (err, doc) => {
+	model.findOne({_id: appKey}, {}, (err, doc) => {
 		if(err) {
 			defer.reject(err);
 		}

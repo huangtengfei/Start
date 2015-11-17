@@ -10,7 +10,7 @@
  }
 
  function post(uri, data){
-
+ 	data._appKey = window._appKey;
     return http(uri, 'POST', JSON.stringify(data) || null, {
         "Content-type":"application/json"
     });

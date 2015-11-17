@@ -2,7 +2,7 @@
 export default function($urlRouterProvider, $stateProvider){
 	'ngInject';
 
-	$urlRouterProvider.otherwise('/start');
+	$urlRouterProvider.otherwise('/apps');
 
 	$stateProvider
 		.state('Apps', {
@@ -17,8 +17,10 @@ export default function($urlRouterProvider, $stateProvider){
 			controller: 'SettingController',	
 			controllerAs: 'vm'
 		})
-		.state('Other', {
-			url: '/other',
-			templateUrl: 'templates/archive.html'
+		.state('New', {
+			url: '/create',
+			templateUrl: 'templates/newApp.html',
+			controller: 'NewAppController',	
+			controllerAs: 'vm'
 		});
 }

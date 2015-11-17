@@ -17,37 +17,21 @@ export default class App {
 
 	get(appId) {
 		let defer = this.q.defer();
-		this.service.getApp((result) => {
-			defer.resolve(result);
-		});
-		return defer.promise; 
-	}
-
-	create(newApp) {
-    	let app = {
-			title: newApp
-		};
-		let defer = this.q.defer();
-		this.service.create(app, (result) => {
+		this.service.getApp({id: appId}, (result) => {
 			defer.resolve(result);
 		});
 		return defer.promise;
 	}
 
-	// delete(todoId) {
-	// 	let defer = this.q.defer();
-	// 	this.service.delete({params: todoId}, (result) => {
-	// 		defer.resolve(result);
-	// 	});
-	// 	return defer.promise;
-	// }
-
-	// update(todo) {
-	// 	let defer = this.q.defer();
-	// 	this.service.update({params: todo.todoId}, todo, (result) => {
-	// 		defer.resolve(result);
-	// 	});
-	// 	return defer.promise;
-	// }
-
+	create(newApp) {
+    	let app = {
+			appName: newApp
+		};
+		let defer = this.q.defer();
+		console.log(app);
+		this.service.create(app, (result) => {
+			defer.resolve(result);
+		});
+		return defer.promise;
+	}
 }

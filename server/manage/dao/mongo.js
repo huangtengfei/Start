@@ -32,8 +32,6 @@ mongo.get = (appId) => {
 		if(err) {
 			defer.reject(err);
 		}
-		console.log('-----------------');
-		console.log(doc);
 		defer.resolve(doc);
 	})
 

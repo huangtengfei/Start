@@ -4,10 +4,6 @@ import Start from '../lib/index';
 
 export default class HomeController {
 
-	/*
-	  The below annotation will be processes by ngAnnotate, which
-	  will annotate the constructor after compiling for minification.
-	*/
 	/*@ngInject*/
 	constructor($scope, $filter, $q, TodoFactory) {
 
@@ -18,14 +14,14 @@ export default class HomeController {
 		this.status = 'all';
 		this.scope = $scope;
 
-		Start.init('5643009ef86efc4c2ebbd304');
+		Start.init('564a9acf7717444025ce5c95');
 
-		let query = new Start.Query("todo");
+		let query = new Start.Query($scope, "todo");
 		query.find().then((result) => {
 			this.todos = JSON.parse(result);
+			$scope.$apply();
 		});
 
-	    // use $scope just for use $watch
 	    $scope.$watch('vm.todos', () => {
 	    	this.uncompleted = $filter('filter')(this.todos, {completed: false}).length;
 	    }, true);	  
@@ -50,8 +46,6 @@ export default class HomeController {
 		});	
 	}
 
-
-	// use status change selected style, use statusFilter filter todos in the view 
 	filterTodo(status) {
 		this.status = (status === 1) ? 'all' : (status === 2) ? 'active' : 'completed';
 		this.statusFilter = (status === 1) ? 

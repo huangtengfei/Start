@@ -7,8 +7,6 @@ export default class SettingController {
 
 		this._app = new App($q, AppFactory);
 
-		console.log($stateParams.id);
-
 		this.app = {};
 
 		this._app.get($stateParams.id).then((result) => {

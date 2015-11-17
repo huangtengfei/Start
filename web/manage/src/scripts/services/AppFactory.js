@@ -15,10 +15,10 @@ export default class AppFactory {
 			getApp: {
 				method: 'GET',
 				params: {
-					id: '5643009ef86efc4c2ebbd304'
+					id: ''
 				}
 			}		
 		};
-		return this.$resource(this.urlPrefix + 'api/apps/:params', null, rest);
+		return this.$resource(this.urlPrefix + 'api/apps/:id', null, rest);
 	}
 }
