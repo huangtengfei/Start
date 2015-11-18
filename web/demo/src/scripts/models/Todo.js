@@ -28,21 +28,22 @@ export default class Todo {
     	return todo.save();
 	}
 
-	// delete(todoId) {
-	// 	let defer = this.q.defer();
-	// 	this.service.delete({params: todoId}, (result) => {
-	// 		defer.resolve(result);
-	// 	});
-	// 	return defer.promise;
-	// }
+	delete(todo) {
+		let Thing = Start.Model("todo");
+		return Thing.destroy(todo._id);
+	}
 
-	// update(todo) {
-	// 	let defer = this.q.defer();
-	// 	this.service.update({params: todo.todoId}, todo, (result) => {
-	// 		defer.resolve(result);
-	// 	});
-	// 	return defer.promise;
-	// }
+	update(todo) {
+		let Thing = Start.Model("todo");
+		let newTodo = new Thing();
+		newTodo.set('completed', todo.completed);
+
+		return newTodo.update(todo._id);
+	}
+
+	updateTotal() {
+
+	}
 
 	// clear(todos) {
 	// 	let completedCol = [];

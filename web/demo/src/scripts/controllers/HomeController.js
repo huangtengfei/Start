@@ -30,6 +30,22 @@ export default class HomeController {
 		});	
 	}
 
+	remove(todo) {
+		this.todo.delete(todo).then((result) => {
+			this.scope.$apply(() => {
+				this.todos.splice(this.todos.indexOf(todo), 1);
+			});
+		});
+	}
+
+	toggleCompleted(todo) {
+		this.todo.update(todo).then(() => {
+			// if success, do nothing
+		}, () => {
+			todo.completed = !todo.completed;	// if error, change todo's status to previous
+		});
+	}
+
 	filterTodo(status) {
 		this.status = (status === 1) ? 'all' : (status === 2) ? 'active' : 'completed';
 		this.statusFilter = (status === 1) ? 

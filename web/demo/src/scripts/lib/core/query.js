@@ -7,8 +7,7 @@
  */
 
 import {get, post} from '../base/http';
-
-const baseUrl = 'http://localhost:8000/api/models/';
+import apiUrl from '../config';
 
 export default class Query {
 
@@ -20,7 +19,7 @@ export default class Query {
 		let params = {		
 			_method: 'GET'
 		};
-		return post(baseUrl + this.model, params);
+		return post(apiUrl + this.model, params);
 	}
 
 }

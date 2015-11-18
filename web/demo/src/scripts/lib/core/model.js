@@ -6,15 +6,12 @@
  */
 
 import {get, post} from '../base/http';
-
-const url = 'http://localhost:8000/api/models/';
+import apiUrl from '../config';
 
 export default function Model(model) {
 
-	window[model] = someModel;
-	window[model].modelName = model;
-
-	return window[model];
+	someModel.modelName = model;
+	return someModel;
 
 }
 
@@ -22,14 +19,36 @@ class someModel {
 
 	constructor(initData) {
 		this.data = {};
+		this.updateData = {};
 		this.data.modelData = initData;
 	}
 
-	save(optsData) {
+	save() {
+		return post(apiUrl + someModel.modelName, this.data);
+	}
 
-		this.data.modelData = optsData || this.data.modelData;
-		return post(url + someModel.modelName, this.data);
+	set(key, value) {
+		this.updateData[key] = value;
+	}
 
+	update(id) {
+		let params = {
+			_method: 'UPDATE',
+			id: id,
+			updateData: this.updateData
+		};
+		return post(apiUrl + someModel.modelName, params);
 	}
 	
 }
+
+someModel.destroy = (id) => {
+
+	let params = {
+		_method: 'DELETE',
+		id: id
+	};
+
+	return post(apiUrl + someModel.modelName, params);
+
+};

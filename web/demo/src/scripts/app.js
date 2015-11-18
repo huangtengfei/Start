@@ -15,4 +15,4 @@ angular.module('Todo', ['ui.router', 'ngResource'])
 	.directive('autoFocus', autoFocus.directiveFactory)
 	.run(() => {
 		Start.init('564a9acf7717444025ce5c95');
-	})
+	});
