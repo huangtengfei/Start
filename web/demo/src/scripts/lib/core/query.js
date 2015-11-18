@@ -12,8 +12,7 @@ const baseUrl = 'http://localhost:8000/api/models/';
 
 export default class Query {
 
-	constructor(scope, model) {
-		this.scope = scope;
+	constructor(model) {
 		this.model = model;
 	}
 

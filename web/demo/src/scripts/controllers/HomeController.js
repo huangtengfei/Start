@@ -1,13 +1,11 @@
 import Todo from '../models/Todo';
 
-import Start from '../lib/index';
-
 export default class HomeController {
 
 	/*@ngInject*/
 	constructor($scope, $filter, $q, TodoFactory) {
 
-		// this.todo = new Todo($q, TodoFactory);
+		this.todo = new Todo($q, TodoFactory);
 
 		this.todos = [];
 		this.uncompleted = 0;
@@ -16,8 +14,7 @@ export default class HomeController {
 
 		Start.init('564a9acf7717444025ce5c95');
 
-		let query = new Start.Query($scope, "todo");
-		query.find().then((result) => {
+		this.todo.list().then((result) => {
 			this.todos = JSON.parse(result);
 			$scope.$apply();
 		});
@@ -28,18 +25,7 @@ export default class HomeController {
 	}
 
 	add() {
-
-		if(!this.newTodo) {
-			return;
-		}
-
-		let Book = Start.Model("todo");
-		let todo = new Book({
-			title: this.newTodo,
-			completed: false
-		});
-
-		todo.save().then((result) => {
+		this.todo.create(this.newTodo).then((result) => {
 			this.todos.push(JSON.parse(result));		
 			this.newTodo = '';
 			this.scope.$apply();

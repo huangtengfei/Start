@@ -8,23 +8,23 @@ export default class Todo {
 	}
 
 	list() {
-		let defer = this.q.defer();
-		this.service.list((result) => {
-			defer.resolve(result);
-		});
-		return defer.promise;
+		let query = new Start.Query("todo");
+		return query.find();
 	}
 
 	create(newTodo) {
-    	let todo = {
+
+		if(!newTodo) {
+			return;
+		}
+
+		let Thing = Start.Model("todo");
+    	let todo = new Thing({
 			title: newTodo,
 			completed: false
-		};
-		let defer = this.q.defer();
-		this.service.create(todo, (result) => {
-			defer.resolve(result);
 		});
-		return defer.promise;
+		
+    	return todo.save();
 	}
 
 	// delete(todoId) {
