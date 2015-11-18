@@ -12,8 +12,6 @@ export default class HomeController {
 		this.status = 'all';
 		this.scope = $scope;
 
-		Start.init('564a9acf7717444025ce5c95');
-
 		this.todo.list().then((result) => {
 			this.todos = JSON.parse(result);
 			$scope.$apply();

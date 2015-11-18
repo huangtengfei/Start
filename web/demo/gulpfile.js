@@ -80,7 +80,7 @@ gulp.task('scripts', ['jshint'], function() {
 			loadMaps: true // Load the sourcemaps browserify already generated
 		}))
 		.pipe(plugins.ngAnnotate())
-		.pipe(plugins.uglify())
+		// .pipe(plugins.uglify())
 		.pipe(plugins.sourcemaps.write('./', {
 			includeContent: true
 		}))

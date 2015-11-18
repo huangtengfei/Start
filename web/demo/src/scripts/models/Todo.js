@@ -3,6 +3,7 @@ export default class Todo {
 
 	/*@ngInject*/
 	constructor($q, service) {
+		this.Start = Start;
 		this.q = $q;
 		this.service = service;	
 	}
