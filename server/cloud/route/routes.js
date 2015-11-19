@@ -13,6 +13,7 @@ const appApi = require('../api/appApi');
 function routes(app) {
 
 	app.post('/api/models/:model', modelApi.models);
+	app.post('/api/models/:model/:id', modelApi.models);
 
 }
 

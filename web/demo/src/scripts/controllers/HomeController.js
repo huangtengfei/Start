@@ -42,8 +42,8 @@ export default class HomeController {
 	}
 
 	toggleCompleted(todo) {
-		this.todo.updatePart(todo).then(() => {
-			
+		this.todo.update(todo).then((result) => {
+			console.log(result);
 		}, () => {
 			todo.completed = !todo.completed;
 		});

@@ -7,7 +7,8 @@ let api = {};
 api.models = (req, res) => {
 
 	let params = req.body;
-	let modelName = req.params.model;
+	let modelName = req.params.model || '';
+	let id = req.params.id || '';
 
 	let appKey = params._appKey;
 	let condition = params.condition || {};
@@ -15,15 +16,22 @@ api.models = (req, res) => {
 
 	if(params._method){
 		if(params._method === 'GET') {
-			mongo.find(appKey, modelName, condition).then((result) => {
-				res.send(JSON.stringify(result));
-			})
+			if(id) {
+				mongo.findById(appKey, modelName, id).then((result) => {
+					res.send(JSON.stringify(result));
+				})
+			}else {
+				mongo.find(appKey, modelName, condition).then((result) => {
+					res.send(JSON.stringify(result));
+				})
+			}
 		}else if(params._method === 'DELETE') {
+			condition = id ? {'_id': id} : condition;
 			mongo.remove(appKey, modelName, condition).then((result) => {
 				res.send(JSON.stringify(result));
 			})
 		}else if(params._method === 'UPDATE') {
-			mongo.update(appKey, modelName, condition, data).then((result) => {
+			mongo.update(appKey, modelName, id, data).then((result) => {
 				res.send(JSON.stringify(result));
 			})
 		}		

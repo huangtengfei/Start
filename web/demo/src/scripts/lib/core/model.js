@@ -19,7 +19,7 @@ class someModel {
 
 	constructor(initData) {
 		this.updateData = {};
-		this.initData = initData || {};
+		this.initData = initData;
 	}
 
 	save() {
@@ -33,31 +33,31 @@ class someModel {
 		this.updateData[key] = value;
 	}
 
-	updatePart(condition) {
+	update(id) {
 		let params = {
 			_method: 'UPDATE',
-			condition: condition || {},
-			data: this.updateData
+			data: this.initData || this.updateData
 		};
-		return post(apiUrl + someModel.modelName, params);
-	}
-
-	update(condition) {
-		let params = {
-			_method: 'UPDATE',
-			condition: condition || {},
-			data: this.initData
-		};
-		return post(apiUrl + someModel.modelName, params);
+		return post(apiUrl + someModel.modelName + '/' + id, params);
 	}
 	
 }
+
+someModel.remove = (id) => {
+
+	let params = {
+		_method: 'DELETE'
+	};
+
+	return post(apiUrl + someModel.modelName + '/' + id, params);
+
+};
 
 someModel.destroy = (condition) => {
 
 	let params = {
 		_method: 'DELETE',
-		condition: condition || {}
+		condition: condition
 	};
 
 	return post(apiUrl + someModel.modelName, params);

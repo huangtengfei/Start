@@ -46,6 +46,36 @@ mongo.find = (appKey, modelName, condition) => {
 };
 
 /**
+ * find by id
+ *
+ * @param {String} appKey
+ * @param {String} modelName
+ * @param {String} object id
+ * @return {Promise}
+ * @mongo api
+ */
+mongo.findById = (appKey, modelName, id) => {
+
+	let defer = q.defer();
+	
+	initDb(appKey).then((result) => {
+
+		db = require('monk')(dbUrl + result.appName);
+		let model = db.get(modelName);
+
+		model.findById(id, (err, doc) => {
+			if(err) {
+				defer.reject(err);
+			}
+			defer.resolve(doc);
+		})
+
+	})
+
+	return defer.promise;
+};
+
+/**
  * insert
  *
  * @param {String} appKey
@@ -79,11 +109,11 @@ mongo.insert = (appKey, modelName, data) => {
  *
  * @param {String} appKey
  * @param {String} modelName
- * @param {Object} query condition
+ * @param {String} object id
  * @return {Promise}
  * @mongo api
  */
-mongo.update = (appKey, modelName, condition, data) => {
+mongo.update = (appKey, modelName, id, data) => {
 
 	let defer = q.defer();
 	
@@ -93,7 +123,7 @@ mongo.update = (appKey, modelName, condition, data) => {
 		let model = db.get(modelName);
 
 		// only update spefic fields in a document
-		model.update(condition, {$set: data}, (err, doc) => {
+		model.update({'_id': id}, {$set: data}, (err, doc) => {
 			if(err) {
 				defer.reject(err);
 			}
@@ -146,6 +176,12 @@ mongo.remove = (appKey, modelName, condition) => {
 	return defer.promise;
 }
 
+/**
+ * get dbName
+ *
+ * @param {String} appKey
+ * @mongo api
+ */
 function initDb(appKey) {
 
 	let defer = q.defer();

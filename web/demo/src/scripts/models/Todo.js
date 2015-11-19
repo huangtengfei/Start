@@ -30,36 +30,23 @@ export default class Todo {
     	return todo.save();
 	}
 
-	updatePart(todo) {
+	update(todo) {
 		
+		// 有两种方式更新一个 model，下面是方式一
 		let newTodo = new this.TodoModel();
-		let cond = {
-			_id: todo._id
-		};
 		newTodo.set('completed', todo.completed);
 
-		return newTodo.updatePart(cond);
-	}
+		// // 方式二
+		// let newTodo = new this.TodoModel({
+		// 	title: todo.title + '_updated',
+		// 	completed: todo.completed
+		// });
 
-	update(todo) {
-
-		let newTodo = new this.TodoModel({
-			title: todo.title + '_updated',
-			completed: todo.completed
-		});
-
-		let cond = {
-			_id: todo._id
-		};
-
-		return newTodo.update(cond);
+		return newTodo.update(todo._id);
 	}
 
 	remove(todo) {	
-		let cond = {
-			_id: todo._id
-		};
-		return this.TodoModel.destroy(cond);
+		return this.TodoModel.remove(todo._id);
 	}
 
 	clear() {
