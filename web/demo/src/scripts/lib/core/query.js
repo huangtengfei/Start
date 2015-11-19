@@ -15,9 +15,10 @@ export default class Query {
 		this.model = model;
 	}
 
-	find() {
+	find(condition) {
 		let params = {		
-			_method: 'GET'
+			_method: 'GET', 
+			condition: condition || {}
 		};
 		return post(apiUrl + this.model, params);
 	}

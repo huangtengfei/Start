@@ -18,33 +18,35 @@ export default function Model(model) {
 class someModel {
 
 	constructor(initData) {
-		this.data = {};
 		this.updateData = {};
-		this.data.modelData = initData;
+		this.initData = initData || {};
 	}
 
 	save() {
-		return post(apiUrl + someModel.modelName, this.data);
+		let params = {
+			data: this.initData
+		};
+		return post(apiUrl + someModel.modelName, params);
 	}
 
 	set(key, value) {
 		this.updateData[key] = value;
 	}
 
-	updatePart(id) {
+	updatePart(condition) {
 		let params = {
 			_method: 'UPDATE',
-			id: id,
-			updateData: this.updateData
+			condition: condition || {},
+			data: this.updateData
 		};
 		return post(apiUrl + someModel.modelName, params);
 	}
 
-	update(id) {
+	update(condition) {
 		let params = {
 			_method: 'UPDATE',
-			id: id,
-			updateData: this.data.modelData
+			condition: condition || {},
+			data: this.initData
 		};
 		return post(apiUrl + someModel.modelName, params);
 	}
@@ -55,7 +57,7 @@ someModel.destroy = (condition) => {
 
 	let params = {
 		_method: 'DELETE',
-		condition: condition
+		condition: condition || {}
 	};
 
 	return post(apiUrl + someModel.modelName, params);

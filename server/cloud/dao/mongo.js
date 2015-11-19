@@ -15,7 +15,46 @@ let db;
 
 let mongo = {};
 
-mongo.create = (appKey, modelName, data) => {
+/**
+ * find
+ *
+ * @param {String} appKey
+ * @param {String} modelName
+ * @param {Object} query condition
+ * @return {Promise}
+ * @mongo api
+ */
+mongo.find = (appKey, modelName, condition) => {
+
+	let defer = q.defer();
+	
+	initDb(appKey).then((result) => {
+
+		db = require('monk')(dbUrl + result.appName);
+		let model = db.get(modelName);
+
+		model.find(condition, (err, doc) => {
+			if(err) {
+				defer.reject(err);
+			}
+			defer.resolve(doc);
+		})
+
+	})
+
+	return defer.promise;
+};
+
+/**
+ * insert
+ *
+ * @param {String} appKey
+ * @param {String} modelName
+ * @param {Object} the data to be inserted
+ * @return {Promise}
+ * @mongo api
+ */
+mongo.insert = (appKey, modelName, data) => {
 
 	let defer = q.defer();
 
@@ -23,7 +62,6 @@ mongo.create = (appKey, modelName, data) => {
 
 		db = require('monk')(dbUrl + result.appName);
 		let model = db.get(modelName);
-
 		model.insert(data, (err, doc) => {
 			if(err) {
 				defer.reject(err);
@@ -34,10 +72,18 @@ mongo.create = (appKey, modelName, data) => {
 	})
 
 	return defer.promise;
-
 }
 
-mongo.list = (appKey, modelName, params) => {
+/**
+ * update
+ *
+ * @param {String} appKey
+ * @param {String} modelName
+ * @param {Object} query condition
+ * @return {Promise}
+ * @mongo api
+ */
+mongo.update = (appKey, modelName, condition, data) => {
 
 	let defer = q.defer();
 	
@@ -46,7 +92,8 @@ mongo.list = (appKey, modelName, params) => {
 		db = require('monk')(dbUrl + result.appName);
 		let model = db.get(modelName);
 
-		model.find({}, {}, (err, doc) => {
+		// only update spefic fields in a document
+		model.update(condition, {$set: data}, (err, doc) => {
 			if(err) {
 				defer.reject(err);
 			}
@@ -56,31 +103,17 @@ mongo.list = (appKey, modelName, params) => {
 	})
 
 	return defer.promise;
-
 }
 
-mongo.removeById = (appKey, modelName, id) => {
-
-	let defer = q.defer();
-	
-	initDb(appKey).then((result) => {
-
-		db = require('monk')(dbUrl + result.appName);
-		let model = db.get(modelName);
-
-		model.remove({_id: id}, (err, doc) => {
-			if(err) {
-				defer.reject(err);
-			}
-			defer.resolve(doc);
-		})
-
-	})
-
-	return defer.promise;
-
-}
-
+/**
+ * remove
+ *
+ * @param {String} appKey
+ * @param {String} modelName
+ * @param {Object} query condition
+ * @return {Promise}
+ * @mongo api
+ */
 mongo.remove = (appKey, modelName, condition) => {
 
 	let defer = q.defer();
@@ -97,8 +130,8 @@ mongo.remove = (appKey, modelName, condition) => {
 			if(!doc){
 				doc = {
 					success: false,
-					errCode: 101,
-					errMsg: 'not exist data in such condition.'
+					code: 101,
+					error: 'not exist data in such condition.'
 				}
 			}else {
 				doc = {
@@ -111,30 +144,6 @@ mongo.remove = (appKey, modelName, condition) => {
 	})
 
 	return defer.promise;
-
-}
-
-mongo.updateById = (appKey, modelName, id, data) => {
-
-	let defer = q.defer();
-	
-	initDb(appKey).then((result) => {
-
-		db = require('monk')(dbUrl + result.appName);
-		let model = db.get(modelName);
-
-		// update spefic fields in a document
-		model.update({"_id": id}, { $set: data}, (err, doc) => {
-			if(err) {
-				defer.reject(err);
-			}
-			defer.resolve(doc);
-		})
-
-	})
-
-	return defer.promise;
-
 }
 
 function initDb(appKey) {

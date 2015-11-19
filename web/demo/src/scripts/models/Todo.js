@@ -33,9 +33,12 @@ export default class Todo {
 	updatePart(todo) {
 		
 		let newTodo = new this.TodoModel();
+		let cond = {
+			_id: todo._id
+		};
 		newTodo.set('completed', todo.completed);
 
-		return newTodo.updatePart(todo._id);
+		return newTodo.updatePart(cond);
 	}
 
 	update(todo) {
@@ -45,7 +48,11 @@ export default class Todo {
 			completed: todo.completed
 		});
 
-		return newTodo.update(todo._id);
+		let cond = {
+			_id: todo._id
+		};
+
+		return newTodo.update(cond);
 	}
 
 	remove(todo) {	
