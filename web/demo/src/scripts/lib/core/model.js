@@ -31,7 +31,7 @@ class someModel {
 		this.updateData[key] = value;
 	}
 
-	update(id) {
+	updatePart(id) {
 		let params = {
 			_method: 'UPDATE',
 			id: id,
@@ -39,14 +39,23 @@ class someModel {
 		};
 		return post(apiUrl + someModel.modelName, params);
 	}
+
+	update(id) {
+		let params = {
+			_method: 'UPDATE',
+			id: id,
+			updateData: this.data.modelData
+		};
+		return post(apiUrl + someModel.modelName, params);
+	}
 	
 }
 
-someModel.destroy = (id) => {
+someModel.destroy = (condition) => {
 
 	let params = {
 		_method: 'DELETE',
-		id: id
+		condition: condition
 	};
 
 	return post(apiUrl + someModel.modelName, params);

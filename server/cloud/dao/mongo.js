@@ -59,7 +59,7 @@ mongo.list = (appKey, modelName, params) => {
 
 }
 
-mongo.delete = (appKey, modelName, id) => {
+mongo.removeById = (appKey, modelName, id) => {
 
 	let defer = q.defer();
 	
@@ -81,7 +81,40 @@ mongo.delete = (appKey, modelName, id) => {
 
 }
 
-mongo.update = (appKey, modelName, id, data) => {
+mongo.remove = (appKey, modelName, condition) => {
+
+	let defer = q.defer();
+	
+	initDb(appKey).then((result) => {
+
+		db = require('monk')(dbUrl + result.appName);
+		let model = db.get(modelName);
+
+		model.remove(condition, (err, doc) => {
+			if(err) {
+				defer.reject(err);
+			}
+			if(!doc){
+				doc = {
+					success: false,
+					errCode: 101,
+					errMsg: 'not exist data in such condition.'
+				}
+			}else {
+				doc = {
+					success: true,
+					data: doc
+				}
+			}
+			defer.resolve(doc);
+		})
+	})
+
+	return defer.promise;
+
+}
+
+mongo.updateById = (appKey, modelName, id, data) => {
 
 	let defer = q.defer();
 	

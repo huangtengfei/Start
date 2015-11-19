@@ -13,7 +13,7 @@ export default class HomeController {
 		this.scope = $scope;
 
 		this.todo.list().then((result) => {
-			this.todos = JSON.parse(result);
+			this.todos = result;
 			$scope.$apply();
 		});
 
@@ -24,25 +24,45 @@ export default class HomeController {
 
 	add() {
 		this.todo.create(this.newTodo).then((result) => {
-			this.todos.push(JSON.parse(result));		
+			console.log(result);
+			this.todos.push(result);		
 			this.newTodo = '';
 			this.scope.$apply();
 		});	
 	}
 
 	remove(todo) {
-		this.todo.delete(todo).then((result) => {
-			this.scope.$apply(() => {
-				this.todos.splice(this.todos.indexOf(todo), 1);
-			});
+		this.todo.remove(todo).then((result) => {
+			if(result.success) {
+				this.scope.$apply(() => {
+					this.todos.splice(this.todos.indexOf(todo), 1);
+				});
+			}
 		});
 	}
 
 	toggleCompleted(todo) {
-		this.todo.update(todo).then(() => {
-			// if success, do nothing
+		this.todo.updatePart(todo).then(() => {
+			
 		}, () => {
-			todo.completed = !todo.completed;	// if error, change todo's status to previous
+			todo.completed = !todo.completed;
+		});
+	}
+
+	clearCompleted() {
+		this.todo.clear().then((result) => {
+			console.log(result);
+			if(result.success) {
+				let uncompleted = [];
+				this.todos.forEach((todo) => {				
+					if(!todo.completed) {
+						uncompleted.push(todo);
+					}		
+				});
+				this.scope.$apply(() => {
+					this.todos = uncompleted;
+				});
+			}
 		});
 	}
 

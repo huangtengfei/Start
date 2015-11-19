@@ -3,14 +3,17 @@ export default class Todo {
 
 	/*@ngInject*/
 	constructor($q, service) {
-		this.Start = Start;
+
 		this.q = $q;
 		this.service = service;	
+
+		this.TodoModel = Start.Model('todo');
+		this.query = new Start.Query('todo');
+
 	}
 
-	list() {
-		let query = new Start.Query("todo");
-		return query.find();
+	list() {	
+		return this.query.find();
 	}
 
 	create(newTodo) {
@@ -18,9 +21,8 @@ export default class Todo {
 		if(!newTodo) {
 			return;
 		}
-
-		let Thing = Start.Model("todo");
-    	let todo = new Thing({
+		
+    	let todo = new this.TodoModel({
 			title: newTodo,
 			completed: false
 		});
@@ -28,40 +30,36 @@ export default class Todo {
     	return todo.save();
 	}
 
-	delete(todo) {
-		let Thing = Start.Model("todo");
-		return Thing.destroy(todo._id);
+	updatePart(todo) {
+		
+		let newTodo = new this.TodoModel();
+		newTodo.set('completed', todo.completed);
+
+		return newTodo.updatePart(todo._id);
 	}
 
 	update(todo) {
-		let Thing = Start.Model("todo");
-		let newTodo = new Thing();
-		newTodo.set('completed', todo.completed);
+
+		let newTodo = new this.TodoModel({
+			title: todo.title + '_updated',
+			completed: todo.completed
+		});
 
 		return newTodo.update(todo._id);
 	}
 
-	updateTotal() {
-
+	remove(todo) {	
+		let cond = {
+			_id: todo._id
+		};
+		return this.TodoModel.destroy(cond);
 	}
 
-	// clear(todos) {
-	// 	let completedCol = [];
-	// 	let uncompletedCol = [];
-	// 	let defer = this.q.defer();
-	// 	todos.forEach((todo) => {
-	// 		if(todo.completed) {
-	// 			completedCol.push({
-	// 				todoId: todo.todoId
-	// 			});
-	// 		}else {
-	// 			uncompletedCol.push(todo);
-	// 		}
-	// 	});
-	// 	this.service.clear(completedCol, (result) => {
-	// 		defer.resolve(uncompletedCol);
-	// 	});
-	// 	return defer.promise;
-	// }
+	clear() {
+		let cond = {
+			completed: true
+		};
+		return this.TodoModel.destroy(cond);
+	}
 
 }

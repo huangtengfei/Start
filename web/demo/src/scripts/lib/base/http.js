@@ -31,7 +31,7 @@ function http(url, method, data, headers) {
 	xhr.onreadystatechange = () => {
 		if(xhr.readyState === 4) {
 			if(String(xhr.status).match(/^2\d\d$/)){
-				defer.resolve(xhr.responseText);
+				defer.resolve(JSON.parse(xhr.responseText));
 			}else {
 				defer.reject(xhr);
 			}

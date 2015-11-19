@@ -16,11 +16,11 @@ api.models = (req, res) => {
 				res.send(JSON.stringify(result));
 			})
 		}else if(params._method === 'DELETE') {
-			mongo.delete(appKey, modelName, params.id).then((result) => {
+			mongo.remove(appKey, modelName, params.condition).then((result) => {
 				res.send(JSON.stringify(result));
 			})
 		}else if(params._method === 'UPDATE') {
-			mongo.update(appKey, modelName, params.id, params.updateData).then((result) => {
+			mongo.updateById(appKey, modelName, params.id, params.updateData).then((result) => {
 				res.send(JSON.stringify(result));
 			})
 		}		
