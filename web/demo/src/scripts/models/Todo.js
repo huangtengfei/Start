@@ -49,11 +49,8 @@ export default class Todo {
 		return this.TodoModel.remove(todo._id);
 	}
 
-	clear() {
-		let cond = {
-			completed: true
-		};
-		return this.TodoModel.destroy(cond);
+	clear(todos) {
+		return this.TodoModel.removeAll(todos);
 	}
 
 }

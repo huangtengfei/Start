@@ -123,7 +123,7 @@ mongo.update = (appKey, modelName, id, data) => {
 		let model = db.get(modelName);
 
 		// only update spefic fields in a document
-		model.update({'_id': id}, {$set: data}, (err, doc) => {
+		model.findAndModify({'_id': id}, {$set: data}, (err, doc) => {
 			if(err) {
 				defer.reject(err);
 			}
@@ -140,11 +140,11 @@ mongo.update = (appKey, modelName, id, data) => {
  *
  * @param {String} appKey
  * @param {String} modelName
- * @param {Object} query condition
+ * @param {String} id
  * @return {Promise}
  * @mongo api
  */
-mongo.remove = (appKey, modelName, condition) => {
+mongo.remove = (appKey, modelName, id) => {
 
 	let defer = q.defer();
 	
@@ -153,21 +153,9 @@ mongo.remove = (appKey, modelName, condition) => {
 		db = require('monk')(dbUrl + result.appName);
 		let model = db.get(modelName);
 
-		model.remove(condition, (err, doc) => {
+		model.remove({'_id': id}, (err, doc) => {
 			if(err) {
 				defer.reject(err);
-			}
-			if(!doc){
-				doc = {
-					success: false,
-					code: 101,
-					error: 'not exist data in such condition.'
-				}
-			}else {
-				doc = {
-					success: true,
-					data: doc
-				}
 			}
 			defer.resolve(doc);
 		})

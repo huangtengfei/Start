@@ -6,7 +6,7 @@
  */
 
 import {get, post} from '../base/http';
-import apiUrl from '../config';
+import {apiUrl, modelUrl, batchPath} from '../config';
 
 export default function Model(model) {
 
@@ -26,7 +26,7 @@ class someModel {
 		let params = {
 			data: this.initData
 		};
-		return post(apiUrl + someModel.modelName, params);
+		return post(modelUrl + someModel.modelName, params);
 	}
 
 	set(key, value) {
@@ -35,10 +35,10 @@ class someModel {
 
 	update(id) {
 		let params = {
-			_method: 'UPDATE',
+			_method: 'PATCH',
 			data: this.initData || this.updateData
 		};
-		return post(apiUrl + someModel.modelName + '/' + id, params);
+		return post(modelUrl + someModel.modelName + '/' + id, params);
 	}
 	
 }
@@ -49,17 +49,18 @@ someModel.remove = (id) => {
 		_method: 'DELETE'
 	};
 
-	return post(apiUrl + someModel.modelName + '/' + id, params);
+	return post(modelUrl + someModel.modelName + '/' + id, params);
 
 };
 
-someModel.destroy = (condition) => {
+someModel.removeAll = (todos) => {
 
 	let params = {
 		_method: 'DELETE',
-		condition: condition
+		modelName: someModel.modelName,
+		data: todos
 	};
 
-	return post(apiUrl + someModel.modelName, params);
+	return post(apiUrl + batchPath, params);
 
 };

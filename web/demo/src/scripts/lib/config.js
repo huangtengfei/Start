@@ -1,4 +1,9 @@
 
-const apiUrl = 'http://localhost:8000/api/models/';
+const apiUrl = 'http://localhost:8000/api/';
 
-export default apiUrl;
+const modelUrl = 'http://localhost:8000/api/models/';
+
+const batchPath = 'batch';
+
+export {apiUrl, modelUrl, batchPath};
+

@@ -13,8 +13,11 @@ export default class HomeController {
 		this.scope = $scope;
 
 		this.todo.list().then((result) => {
-			this.todos = result;
-			$scope.$apply();
+			if(result.success) {
+				this.scope.$apply(() => {
+					this.todos = result.success;
+				})
+			}
 		});
 
 	    $scope.$watch('vm.todos', () => {
@@ -24,10 +27,12 @@ export default class HomeController {
 
 	add() {
 		this.todo.create(this.newTodo).then((result) => {
-			console.log(result);
-			this.todos.push(result);		
-			this.newTodo = '';
-			this.scope.$apply();
+			if(result.success) {
+				this.scope.$apply(() => {
+					this.todos.push(result.success);		
+					this.newTodo = '';
+				})
+			}
 		});	
 	}
 
@@ -50,15 +55,18 @@ export default class HomeController {
 	}
 
 	clearCompleted() {
-		this.todo.clear().then((result) => {
+		let uncompleted = [];
+		let completed = [];
+		this.todos.forEach((todo) => {				
+			if(!todo.completed) {
+				uncompleted.push(todo);
+			}else {
+				completed.push(todo._id);
+			}		
+		});
+		this.todo.clear(completed).then((result) => {
 			console.log(result);
-			if(result.success) {
-				let uncompleted = [];
-				this.todos.forEach((todo) => {				
-					if(!todo.completed) {
-						uncompleted.push(todo);
-					}		
-				});
+			if(result.success) {				
 				this.scope.$apply(() => {
 					this.todos = uncompleted;
 				});

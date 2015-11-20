@@ -7,7 +7,7 @@
  */
 
 import {get, post} from '../base/http';
-import apiUrl from '../config';
+import {modelUrl} from '../config';
 
 export default class Query {
 
@@ -16,11 +16,13 @@ export default class Query {
 	}
 
 	find(condition) {
+
 		let params = {		
 			_method: 'GET', 
 			condition: condition || {}
 		};
-		return post(apiUrl + this.model, params);
+		
+		return post(modelUrl + this.model, params)
 	}
 
 }

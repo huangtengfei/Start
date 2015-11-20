@@ -8,12 +8,13 @@
 'use strict';
 
 const modelApi = require('../api/modelApi');
-const appApi = require('../api/appApi');
+const batchApi = require('../api/batchApi');
 
 function routes(app) {
 
 	app.post('/api/models/:model', modelApi.models);
 	app.post('/api/models/:model/:id', modelApi.models);
+	app.post('/api/batch', batchApi.batch);
 
 }
 
