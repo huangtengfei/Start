@@ -16,6 +16,8 @@ api.models = (req, res) => {
 	let condition = params.condition || {};
 	let data = params.data || {};
 
+	console.log(params);
+
 	if(method){
 		if(method === 'GET') {
 			if(id) {

@@ -22,5 +22,11 @@ export default function($urlRouterProvider, $stateProvider){
 			templateUrl: 'templates/newApp.html',
 			controller: 'NewAppController',	
 			controllerAs: 'vm'
+		})
+		.state('Api', {
+			url: '/api',
+			templateUrl: 'templates/apiTest.html',
+			controller: 'ApiTestController',	
+			controllerAs: 'vm'
 		});
 }
