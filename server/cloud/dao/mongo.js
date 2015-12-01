@@ -35,10 +35,7 @@ mongo.findById = (appKey, modelName, id) => {
 
 	let defer = q.defer();
 	
-	getModel(appKey, modelName).then((result) => {
-
-		let schema = new Schema(result.schemaObj);
-		let Model = db.model(modelName, schema);
+	getModel(appKey, modelName).then((Model) => {
 
 		Model.findById(id, (err, doc) => {
 			if(err) {
@@ -65,10 +62,7 @@ mongo.find = (appKey, modelName, condition) => {
 
 	let defer = q.defer();
 	
-	getModel(appKey, modelName).then((result) => {
-
-		let schema = new Schema(result.schemaObj);
-		let Model = db.model(modelName, schema);
+	getModel(appKey, modelName).then((Model) => {
 
 		Model.find(condition, (err, doc) => {
 			if(err) {
@@ -95,10 +89,7 @@ mongo.update = (appKey, modelName, id, data) => {
 
 	let defer = q.defer();
 	
-	getModel(appKey, modelName).then((result) => {
-
-		let schema = new Schema(result.schemaObj);
-		let Model = db.model(modelName, schema);
+	getModel(appKey, modelName).then((Model) => {
 
 		Model.findByIdAndUpdate(id, data, (err, doc) => {
 			if(err) {
@@ -125,10 +116,7 @@ mongo.remove = (appKey, modelName, id) => {
 
 	let defer = q.defer();
 	
-	getModel(appKey, modelName).then((result) => {
-
-		let schema = new Schema(result.schemaObj);
-		let Model = db.model(modelName, schema);
+	getModel(appKey, modelName).then((Model) => {
 
 		Model.findByIdAndRemove(id, (err, doc) => {
 			if(err) {
@@ -154,39 +142,15 @@ mongo.insert = (appKey, modelName, modelData) => {
 
 	let defer = q.defer();
 
-	getModel(appKey, modelName).then((result) => {
+	getModel(appKey, modelName, modelData).then((Model) => {
 
-		let Model;
-
-		if(result.noSchemaObject) {
-			newSchema(appKey, modelName, util.getModel(modelData)).then((doc) => {
-
-				let schema = new Schema(doc.schemaObj, { versionKey: false });
-				Model = db.model(modelName, schema);
-
-				let model = new Model(modelData);
-				model.save((err, doc) => {
-					if(err) {
-						defer.reject(err);
-					}
-					defer.resolve(doc);
-				});
-			})			
-		}else{
-
-			console.log('schemaObj: ' + result);
-
-			let schema = new Schema(result.schemaObj, { versionKey: false })
-			Model = db.model(modelName, schema);
-
-			let model = new Model(modelData);
-			model.save((err, doc) => {
-				if(err) {
-					defer.reject(err);
-				}
-				defer.resolve(doc);
-			});
-		}
+		let model = new Model(modelData);
+		model.save((err, doc) => {
+			if(err) {
+				defer.reject(err);
+			}
+			defer.resolve(doc);
+		});
 
 	});
 
@@ -194,35 +158,10 @@ mongo.insert = (appKey, modelName, modelData) => {
 
 };
 
-// 创建一条新的 modelSchema
-function newSchema(appKey, modelName, schemaObj) {
-
-	let defer = q.defer();
-
-	let data = {
-		appKey: appKey,
-		className: modelName,
-		schemaObj: schemaObj
-	}
-
-	let Model = db.model('schema', modelSchema);
-	let model = new Model(data);
-
-	model.save((err, doc) => {
-		if(err) {
-			defer.reject(err);
-		}
-		defer.resolve(doc);
-	});
-
-	return defer.promise;
-
-}
-
 // 通过 modelName 找到 modelSchema
 function getModel(appKey, modelName) {
 
-	let defer = q.defer();
+	let defer = q.defer();	
 
 	getDb(appKey).then((appName) => {
 
@@ -230,16 +169,21 @@ function getModel(appKey, modelName) {
 
 		let Model = db.model('schema', modelSchema);
 
-		Model.findOne({className: modelName}, (err, doc) => {
+		Model.findOne({className: modelName}, (err, doc) => {	
+
 			if(err){
 				defer.reject(err);
 			}
 			if(doc) {
-				defer.resolve(doc);
+				let schema = new Schema(doc.schemaObj, { versionKey: false });
+				Model = db.model(modelName, schema);
+				defer.resolve(Model);
 			}else {
-				defer.resolve({
-					noSchemaObject: true
-				})
+				newSchema(appKey, modelName, util.getModel(modelData)).then((doc) => {
+					let schema = new Schema(doc.schemaObj, { versionKey: false });
+					Model = db.model(modelName, schema);
+					defer.resolve(Model);
+				})	
 			}
 			
 		})
@@ -266,6 +210,31 @@ function getDb(appKey) {
 	});
 
 	return defer.promise;
+}
+
+// 创建一条新的 modelSchema
+function newSchema(appKey, modelName, schemaObj) {
+
+	let defer = q.defer();
+
+	let data = {
+		appKey: appKey,
+		className: modelName,
+		schemaObj: schemaObj
+	}
+
+	let Model = db.model('schema', modelSchema);
+	let model = new Model(data);
+
+	model.save((err, doc) => {
+		if(err) {
+			defer.reject(err);
+		}
+		defer.resolve(doc);
+	});
+
+	return defer.promise;
+
 }
 
 module.exports = mongo;
