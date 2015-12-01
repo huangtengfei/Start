@@ -31,26 +31,26 @@ let mongo = {};
  * @return {Promise}
  * @mongo api
  */
-// mongo.findById = (appKey, modelName, id) => {
+mongo.findById = (appKey, modelName, id) => {
 
-// 	let defer = q.defer();
+	let defer = q.defer();
 	
-// 	initDb(appKey).then((result) => {
+	getModel(appKey, modelName).then((result) => {
 
-// 		db = mongoose.createConnection('localhost', result.appName);
-// 		Model = mongoose.model(modelName);
+		let schema = new Schema(result.schemaObj);
+		let Model = db.model(modelName, schema);
 
-// 		Model.findById(id, (err, doc) => {
-// 			if(err) {
-// 				defer.reject(err);
-// 			}
-// 			defer.resolve(doc);
-// 		})
+		Model.findById(id, (err, doc) => {
+			if(err) {
+				defer.reject(err);
+			}
+			defer.resolve(doc);
+		})
 
-// 	})
+	})
 
-// 	return defer.promise;
-// };
+	return defer.promise;
+};
 
 /**
  * find
@@ -67,7 +67,7 @@ mongo.find = (appKey, modelName, condition) => {
 	
 	getModel(appKey, modelName).then((result) => {
 
-		let schema = new Schema(result.schemaObj, { versionKey: false });
+		let schema = new Schema(result.schemaObj);
 		let Model = db.model(modelName, schema);
 
 		Model.find(condition, (err, doc) => {
@@ -81,6 +81,65 @@ mongo.find = (appKey, modelName, condition) => {
 
 	return defer.promise;
 };
+
+/**
+ * update
+ *
+ * @param {String} appKey
+ * @param {String} modelName
+ * @param {String} object id
+ * @return {Promise}
+ * @mongo api
+ */
+mongo.update = (appKey, modelName, id, data) => {
+
+	let defer = q.defer();
+	
+	getModel(appKey, modelName).then((result) => {
+
+		let schema = new Schema(result.schemaObj);
+		let Model = db.model(modelName, schema);
+
+		Model.findByIdAndUpdate(id, data, (err, doc) => {
+			if(err) {
+				defer.reject(err);
+			}
+			defer.resolve(doc);
+		})
+
+	})
+
+	return defer.promise;
+};
+
+/**
+ * remove
+ *
+ * @param {String} appKey
+ * @param {String} modelName
+ * @param {String} id
+ * @return {Promise}
+ * @mongo api
+ */
+mongo.remove = (appKey, modelName, id) => {
+
+	let defer = q.defer();
+	
+	getModel(appKey, modelName).then((result) => {
+
+		let schema = new Schema(result.schemaObj);
+		let Model = db.model(modelName, schema);
+
+		Model.findByIdAndRemove(id, (err, doc) => {
+			if(err) {
+				defer.reject(err);
+			}
+			defer.resolve(doc);
+		})
+	})
+
+	return defer.promise;
+}
 
 /**
  * insert
@@ -115,6 +174,8 @@ mongo.insert = (appKey, modelName, modelData) => {
 			})			
 		}else{
 
+			console.log('schemaObj: ' + result);
+
 			let schema = new Schema(result.schemaObj, { versionKey: false })
 			Model = db.model(modelName, schema);
 
@@ -131,7 +192,7 @@ mongo.insert = (appKey, modelName, modelData) => {
 
 	return defer.promise;
 
-}
+};
 
 // 创建一条新的 modelSchema
 function newSchema(appKey, modelName, schemaObj) {
@@ -206,111 +267,5 @@ function getDb(appKey) {
 
 	return defer.promise;
 }
-
-
-/**
- * update
- *
- * @param {String} appKey
- * @param {String} modelName
- * @param {String} object id
- * @return {Promise}
- * @mongo api
- */
-// mongo.update = (appKey, modelName, id, data) => {
-
-// 	let defer = q.defer();
-	
-// 	initDb(appKey).then((result) => {
-
-// 		db = require('monk')(dbUrl + result.appName);
-// 		let model = db.get(modelName);
-
-// 		// only update spefic fields in a document
-// 		model.findAndModify({'_id': id}, {$set: data}, (err, doc) => {
-// 			if(err) {
-// 				defer.reject(err);
-// 			}
-// 			defer.resolve(doc);
-// 		})
-
-// 	})
-
-// 	return defer.promise;
-// }
-
-/**
- * remove
- *
- * @param {String} appKey
- * @param {String} modelName
- * @param {String} id
- * @return {Promise}
- * @mongo api
- */
-// mongo.remove = (appKey, modelName, id) => {
-
-// 	let defer = q.defer();
-	
-// 	initDb(appKey).then((result) => {
-
-// 		db = require('monk')(dbUrl + result.appName);
-// 		let model = db.get(modelName);
-
-// 		model.remove({'_id': id}, (err, doc) => {
-// 			if(err) {
-// 				defer.reject(err);
-// 			}
-// 			defer.resolve(doc);
-// 		})
-// 	})
-
-// 	return defer.promise;
-// }
-
-// mongo.getCollections = (appId) => {
-
-// 	let defer = q.defer();
-	
-// 	initDb(appId).then((result) => {
-// 		console.log(result);
-
-// 		let mgs = mongoose.createConnection('localhost', result.appName);
-
-// 		mgs.db.collectionNames(function (err, names) {
-// 			console.log(names);
-// 			defer.resolve(names);
-// 		})
-
-
-// 	})
-
-// 	return defer.promise;
-
-// }
-
-/**
- * get dbName
- *
- * @param {String} appKey
- * @mongo api
- */
-// function initDb(appKey) {
-
-// 	let defer = q.defer();
-// 	db = mongoose.createConnection('localhost', 'start');	
-// 	console.log('isExist:' + mongoose.models['app']);
-// 	let Model = mongoose.model('app');
-
-// 	Model.findOne({_id: appKey}, (err, doc) => {
-// 		if(err) {
-// 			defer.reject(err);
-// 		}
-// 		defer.resolve(doc);
-// 	})
-
-// 	return defer.promise;
-
-// }
 
 module.exports = mongo;

@@ -27,6 +27,7 @@ export default class HomeController {
 
 	add() {
 		this.todo.create(this.newTodo).then((result) => {
+			console.log(result.success);
 			if(result.success) {
 				this.scope.$apply(() => {
 					this.todos.push(result.success);		

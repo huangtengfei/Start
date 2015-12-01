@@ -7,7 +7,7 @@ export default class ApiTestController {
 		this.ApiService = ApiService;
 
 		// this.params = {
-		//     "_appKey": "564a9acf7717444025ce5c95",
+		//     "_appKey": "5657d22fb9d589400a866f21",
 		//     "_method": "GET"
 		// };
 
