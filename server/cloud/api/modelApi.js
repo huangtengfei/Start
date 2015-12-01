@@ -16,6 +16,7 @@ api.models = (req, res) => {
 	let condition = params.condition || {};
 	let data = params.data || {};
 
+	console.log('--------------params--------------');
 	console.log(params);
 
 	if(method){

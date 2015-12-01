@@ -1,18 +1,20 @@
 
 'use strict';
 
+const appSchema = require('../model/appSchema');
 const q = require('q');
 
-const db = require('monk')('localhost/start');
+let mongoose = require('mongoose');
+let db = mongoose.createConnection('localhost', 'start');
+let Model = db.model('App', appSchema);
 
 let mongo = {};
 
 mongo.list = (params) => {
 
 	let defer = q.defer();
-	let model = db.get('app');
 
-	model.find({}, {}, (err, doc) => {
+	Model.find({}, (err, doc) => {
 		if(err) {
 			defer.reject(err);
 		}
@@ -23,12 +25,11 @@ mongo.list = (params) => {
 
 }
 
-mongo.get = (appId) => {
+mongo.get = (appKey) => {
 
 	let defer = q.defer();
-	let model = db.get('app');
 
-	model.findOne({_id: appId}, {}, (err, doc) => {
+	Model.findOne({_id: appKey}, (err, doc) => {
 		if(err) {
 			defer.reject(err);
 		}
@@ -42,9 +43,9 @@ mongo.get = (appId) => {
 mongo.create = (appData) => {
 
 	let defer = q.defer();
-	let model = db.get('app');
+	let model = new Model(appData);
 
-	model.insert(appData, (err, doc) => {
+	model.save((err, doc) => {
 		if(err) {
 			defer.reject(err);
 		}

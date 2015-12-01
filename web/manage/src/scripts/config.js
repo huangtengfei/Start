@@ -28,5 +28,11 @@ export default function($urlRouterProvider, $stateProvider){
 			templateUrl: 'templates/apiTest.html',
 			controller: 'ApiTestController',	
 			controllerAs: 'vm'
+		})
+		.state('Data', {
+			url: '/data?id',
+			templateUrl: 'templates/dataManage.html',
+			controller: 'DataManageController',
+			controllerAs: 'vm'
 		});
 }
