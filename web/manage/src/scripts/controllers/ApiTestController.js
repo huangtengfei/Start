@@ -18,7 +18,7 @@ export default class ApiTestController {
 		let params = this.params;
 
 		this.ApiService.list({model: this.modelName, id: this.objectId}, params, (result) => {
-			this.response = result.success;
+			this.response = result;
 			console.log(result);
 		});
 

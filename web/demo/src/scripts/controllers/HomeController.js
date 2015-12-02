@@ -13,11 +13,9 @@ export default class HomeController {
 		this.scope = $scope;
 
 		this.todo.list().then((result) => {
-			if(result.data) {
-				this.scope.$apply(() => {
-					this.todos = result.data;
-				})
-			}
+			this.scope.$apply(() => {
+				this.todos = result;
+			})
 		});
 
 	    $scope.$watch('vm.todos', () => {
@@ -27,23 +25,18 @@ export default class HomeController {
 
 	add() {
 		this.todo.create(this.newTodo).then((result) => {
-			console.log(result.success);
-			if(result.data) {
-				this.scope.$apply(() => {
-					this.todos.push(result.data);		
-					this.newTodo = '';
-				})
-			}
+			this.scope.$apply(() => {
+				this.todos.push(result);		
+				this.newTodo = '';
+			})
 		});	
 	}
 
 	remove(todo) {
 		this.todo.remove(todo).then((result) => {
-			if(result.data) {
-				this.scope.$apply(() => {
-					this.todos.splice(this.todos.indexOf(todo), 1);
-				});
-			}
+			this.scope.$apply(() => {
+				this.todos.splice(this.todos.indexOf(todo), 1);
+			});
 		});
 	}
 
@@ -66,12 +59,9 @@ export default class HomeController {
 			}		
 		});
 		this.todo.clear(completed).then((result) => {
-			console.log(result);
-			if(result.data) {				
-				this.scope.$apply(() => {
-					this.todos = uncompleted;
-				});
-			}
+			this.scope.$apply(() => {
+				this.todos = uncompleted;
+			});
 		});
 	}
 

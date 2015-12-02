@@ -38,19 +38,10 @@ mongo.findById = (appKey, modelName, id) => {
 	getModel(appKey, modelName).then((Model) => {
 
 		Model.findById(id, (err, doc) => {
-			let result = {};
 			if(err) {
 				defer.reject(err);
 			}
-			if(doc){
-				result.data = doc;
-			}else {
-				result.error = {
-					code: 101, 
-					message: 'data not exist'
-				}
-			}
-			defer.resolve(result);
+			defer.resolve(doc);
 		})
 
 	})
@@ -74,19 +65,10 @@ mongo.find = (appKey, modelName, condition) => {
 	getModel(appKey, modelName).then((Model) => {
 
 		Model.find(condition, (err, doc) => {
-			let result = {};
 			if(err) {
 				defer.reject(err);
 			}
-			if(doc){
-				result.data = doc;
-			}else {
-				result.error = {
-					code: 101, 
-					message: 'data not exist'
-				}
-			}
-			defer.resolve(result);
+			defer.resolve(doc);
 		})
 
 	})
@@ -111,19 +93,10 @@ mongo.insert = (appKey, modelName, modelData) => {
 
 		let model = new Model(modelData);
 		model.save((err, doc) => {
-			let result = {};
 			if(err) {
 				defer.reject(err);
 			}
-			if(doc){
-				result.data = doc;
-			}else {
-				result.error = {
-					code: 102, 
-					message: 'invalid data'
-				}
-			}
-			defer.resolve(result);
+			defer.resolve(doc);
 		});
 
 	});
@@ -148,19 +121,10 @@ mongo.update = (appKey, modelName, id, data) => {
 	getModel(appKey, modelName).then((Model) => {
 
 		Model.findByIdAndUpdate(id, data, (err, doc) => {
-			let result = {};
 			if(err) {
 				defer.reject(err);
 			}
-			if(doc){
-				result.data = doc;
-			}else {
-				result.error = {
-					code: 101, 
-					message: 'data not exist'
-				}
-			}
-			defer.resolve(result);
+			defer.resolve(doc);
 		})
 
 	})
@@ -184,19 +148,10 @@ mongo.remove = (appKey, modelName, id) => {
 	getModel(appKey, modelName).then((Model) => {
 
 		Model.findByIdAndRemove(id, (err, doc) => {
-			let result = {};
 			if(err) {
 				defer.reject(err);
 			}
-			if(doc){
-				result.data = doc;
-			}else {
-				result.error = {
-					code: 101, 
-					message: 'data not exist'
-				}
-			}
-			defer.resolve(result);
+			defer.resolve(doc);
 		})
 	})
 
@@ -210,19 +165,10 @@ mongo.removeAll = (appKey, modelName, data) => {
 	getModel(appKey, modelName).then((Model) => {
 
 		Model.remove({_id: {$in: data}}, (err, doc) => {
-			let result = {};
 			if(err) {
 				defer.reject(err);
 			}
-			if(doc){
-				result.data = doc.result;
-			}else {
-				result.error = {
-					code: 101, 
-					message: 'data not exist'
-				}
-			}
-			defer.resolve(result);
+			defer.resolve(doc.result);
 		})
 	})
 
@@ -259,7 +205,7 @@ function getModel(appKey, modelName, modelData) {
 			}else {
 				defer.reject({
 					error: {
-						code: '301',
+						code: '404',
 						message: 'no this model'
 					}
 				})
