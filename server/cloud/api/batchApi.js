@@ -15,22 +15,9 @@ api.batch = (req, res) => {
 
 	if(method) {
 		if(method === 'DELETE') {
-			data.forEach((id) => {
-				mongo.remove(appKey, modelName, id).then((doc) => {
-					let result = {};
-					if(doc) {
-						result.success = {
-							_id: id
-						}
-					}else {
-						result.error = {
-							code: 101,
-							message: 'object not exist.'
-						}
-					}
-					res.send(JSON.stringify(result));
-				})
-			})	
+			mongo.removeAll(appKey, modelName, data).then((doc) => {				
+				res.send(doc);
+			});
 		}
 	}
 

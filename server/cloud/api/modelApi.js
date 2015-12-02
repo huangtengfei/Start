@@ -23,74 +23,25 @@ api.models = (req, res) => {
 		if(method === 'GET') {
 			if(id) {
 				mongo.findById(appKey, modelName, id).then((doc) => {
-					let result = {};
-					if(doc) {
-						result.success = doc;
-					}else {
-						result.error = {
-							code: 101,
-							message: 'object not exist.'
-						}
-					}
-					res.send(JSON.stringify(result));
+					res.send(JSON.stringify(doc));
 				})
 			}else {
-				mongo.find(appKey, modelName, condition).then((docs) => {
-					let result = {};
-					if(docs) {
-						result.success = docs;
-					}else {
-						result.error = {
-							code: 103,
-							message: 'no data in such condition.'
-						}
-					}
-					console.log('----------find-----------');
-					console.log(docs);
-					res.send(JSON.stringify(result));
+				mongo.find(appKey, modelName, condition).then((doc) => {
+					res.send(JSON.stringify(doc));
 				})
 			}
 		}else if(method === 'DELETE') {
 			mongo.remove(appKey, modelName, id).then((doc) => {
-				let result = {};
-				if(doc) {
-					result.success = {
-						_id: id
-					}
-				}else {
-					result.error = {
-						code: 101,
-						message: 'object not exist.'
-					}
-				}
-				res.send(JSON.stringify(result));
+				res.send(JSON.stringify(doc));
 			})
 		}else if(method === 'PATCH') {
 			mongo.update(appKey, modelName, id, data).then((doc) => {
-				let result = {};
-				if(doc) {
-					result.success = doc
-				}else {
-					result.error = {
-						code: 101,
-						message: 'object not exist.'
-					}
-				}
-				res.send(JSON.stringify(result));
+				res.send(JSON.stringify(doc));
 			})
 		}		
 	}else {
 		mongo.insert(appKey, modelName, data).then((doc) => {
-			let result = {};
-			if(doc) {
-				result.success = doc
-			}else {
-				result.error = {
-					code: 102,
-					message: 'invalid object.'
-				}
-			}
-			res.send(JSON.stringify(result));
+			res.send(JSON.stringify(doc));
 		})
 	}
 
