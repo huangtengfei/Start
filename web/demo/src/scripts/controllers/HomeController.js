@@ -15,7 +15,7 @@ export default class HomeController {
 		this.todo.list().then((result) => {
 			this.scope.$apply(() => {
 				this.todos = result;
-			})
+			});
 		});
 
 	    $scope.$watch('vm.todos', () => {
@@ -28,7 +28,7 @@ export default class HomeController {
 			this.scope.$apply(() => {
 				this.todos.push(result);		
 				this.newTodo = '';
-			})
+			});
 		});	
 	}
 

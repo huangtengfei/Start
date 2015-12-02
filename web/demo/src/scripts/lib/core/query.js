@@ -22,7 +22,7 @@ export default class Query {
 			condition: condition || {}
 		};
 		
-		return post(modelUrl + this.model, params)
+		return post(modelUrl + this.model, params);
 	}
 
 }
