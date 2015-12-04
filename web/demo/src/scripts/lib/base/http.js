@@ -23,14 +23,14 @@
  	};
 
  	return http(url, params);
-
 }
 
 function http(url, params) {
 	
 	let defer = Promise.defer();
 
- 	fetch(url, params).then(checkStatus)
+ 	fetch(url, params)
+ 		.then(checkStatus)
  		.then(parseJson)
  		.then((response) => {
 	 	  	defer.resolve(response);

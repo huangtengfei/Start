@@ -5,15 +5,39 @@
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-3">
-				
+				<div class="list-group">
+					<a href="#" class="list-group-item disabled">
+						Collections
+					</a>
+					<a href="#" class="list-group-item" ng-repeat="c in vm.collections" ng-click="vm.selectC(c)">
+						{{c.className}}
+					</a>
+				</div>
 			</div>
 			<div class="col-md-9">
-				<table class="table table-hover">
-				  <tbody>
-				  	<tr>
-				  		
-				  	</tr>
-				  </tbody>
+				<table class="table table-bordered" ng-if="vm.currentC">
+					<thead>
+						<tr>
+							<th>
+								<input type="checkbox">
+							</th>
+							<th>
+								_id(ObjectId)
+							</th>
+							<th ng-repeat="(field, fieldType) in vm.currentC.schemaObj">
+								{{field}}({{fieldType}})
+							</th>
+						</tr>
+					</thead>
+						<tr ng-repeat="item in vm.items">
+							<td><input type="checkbox"></td>
+							<td>{{item['_id']}}</td>
+							<td ng-repeat="(key, value) in vm.currentC.schemaObj">
+								{{item[key]}}
+							</td>
+						</tr>
+					<tbody>
+					</tbody>
 				</table>
 			</div>
 		</div>

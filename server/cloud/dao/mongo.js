@@ -158,6 +158,15 @@ mongo.remove = (appKey, modelName, id) => {
 	return defer.promise;
 };
 
+/**
+ * remove all
+ *
+ * @param {String} appKey
+ * @param {String} modelName
+ * @param {Array} [id]
+ * @return {Promise}
+ * @mongo api
+ */
 mongo.removeAll = (appKey, modelName, data) => {
 
 	let defer = q.defer();
@@ -171,6 +180,34 @@ mongo.removeAll = (appKey, modelName, data) => {
 			defer.resolve(doc.result);
 		})
 	})
+
+	return defer.promise;
+};
+
+/**
+ * get collections of a db
+ *
+ * @param {String} appKey
+ * @return {Promise}
+ * @mongo api
+ */
+mongo.getCollections = (appKey) => {
+
+	let defer = q.defer();
+
+	getDb(appKey).then((appName) => {
+
+		db = mongoose.createConnection('localhost', appName);	
+
+		let Model = db.model('schema', modelSchema);
+
+		Model.find({}, (err, doc) => {
+			if(err){
+				defer.reject(err);
+			}
+			defer.resolve(doc);
+		})
+	});
 
 	return defer.promise;
 }

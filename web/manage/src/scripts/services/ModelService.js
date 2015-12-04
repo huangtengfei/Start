@@ -1,4 +1,4 @@
-export default class DataService {
+export default class ModelService {
 
 	/*@ngInject*/
 	constructor($resource) {
@@ -6,14 +6,14 @@ export default class DataService {
 		this.urlPrefix = 'http://localhost\\:8000/';
 		let rest = {
 			list: { 
-				method: 'GET',
+				method: 'POST',
 				params: {
-					id: '',
-					path: 'models'
+					model: '',
+					id: ''
 				},
 				isArray: true
 			}	
 		};
-		return this.$resource(this.urlPrefix + 'api/data/:id/:path', null, rest);
+		return this.$resource(this.urlPrefix + 'api/models/:model/:id', null, rest);
 	}
 }

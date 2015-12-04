@@ -26,7 +26,9 @@ api.models = (req, res) => {
 					res.send(JSON.stringify(doc));
 				})
 			}else {
+				console.log(modelName);
 				mongo.find(appKey, modelName, condition).then((doc) => {
+					console.log(doc);
 					res.send(JSON.stringify(doc));
 				})
 			}

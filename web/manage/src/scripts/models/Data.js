@@ -6,7 +6,7 @@ export default class Data {
 		this.service = service;
 	}
 
-	list(appId) {
+	getModels(appId) {
 		let defer = this.q.defer();
 		this.service.getModels({id: appId}, (result) => {
 			defer.resolve(result);
