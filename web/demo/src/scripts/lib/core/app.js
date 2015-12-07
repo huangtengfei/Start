@@ -1,7 +1,9 @@
 
+import {$start} from '../config'; 
+
 function init(appKey) {
 
-	window._appKey = appKey;
+	$start.appKey = appKey;
 
 }
 

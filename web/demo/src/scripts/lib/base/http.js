@@ -5,13 +5,15 @@
  * Desc: Start javascript sdk
  */
 
- function get(url) {
- 	return http(url, 'GET');
- }
+import {$start} from '../config'; 
 
- function post(url, data){
+function get(url) {
+	return http(url, 'GET');
+}
 
- 	data._appKey = window._appKey;  
+function post(url, data){
+
+ 	data._appKey = $start.appKey;  
 
  	let params = {
  		method: 'post',
