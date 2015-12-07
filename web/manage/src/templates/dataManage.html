@@ -6,16 +6,21 @@
 		<div class="row">
 			<div class="col-md-3">
 				<div class="list-group">
-					<a href="#" class="list-group-item disabled">
+					<a href="javascript:void(0);" class="list-group-item disabled">
 						Collections
 					</a>
-					<a href="#" class="list-group-item" ng-repeat="c in vm.collections" ng-click="vm.selectC(c)">
+					<a href="javascript:void(0);" class="list-group-item" ng-repeat="c in vm.collections" ng-click="vm.selectC(c)">
 						{{c.className}}
 					</a>
 				</div>
 			</div>
-			<div class="col-md-9">
-				<table class="table table-bordered" ng-if="vm.currentC">
+			<div class="col-md-9" ng-if="vm.currentC">
+				<div class="btn-group">
+				  <button type="button" class="btn btn-default" ng-click="vm.add()">添加</button>
+				  <button type="button" class="btn btn-default" ng-click="vm.removeAll()">删除</button>
+				  <button type="button" class="btn btn-default" ng-click="vm.refresh()">刷新</button>				 
+				</div>
+				<table class="table table-bordered">
 					<thead>
 						<tr>
 							<th>
@@ -27,13 +32,27 @@
 							<th ng-repeat="(field, fieldType) in vm.currentC.schemaObj">
 								{{field}}({{fieldType}})
 							</th>
+							<th>操作</th>
 						</tr>
 					</thead>
 						<tr ng-repeat="item in vm.items">
-							<td><input type="checkbox"></td>
-							<td>{{item['_id']}}</td>
-							<td ng-repeat="(key, value) in vm.currentC.schemaObj">
+							<td><input type="checkbox" ng-model="item._checked"></td>
+							<td>{{item._id}}</td>
+							<td ng-repeat="(key, value) in vm.currentC.schemaObj" ng-if="item._id">
 								{{item[key]}}
+							</td>
+							<td ng-repeat="(key, value) in vm.currentC.schemaObj" ng-if="!item._id">
+								<input type="text" class="form-control" ng-model="item[key]" ng-if="value=='string'">
+								<input type="number" class="form-control" ng-model="item[key]" ng-if="value=='number'">
+								<select class="form-control" ng-if="value=='boolean'" ng-model="item[key]">
+									<option value="true">true</option>
+									<option value="false">false</option>
+								</select>
+							</td>
+							<td>
+								<!-- <a href="" ng-if="item._id">修改</a> -->
+								<a href="" ng-if="item._id" ng-click="vm.remove(item)">删除</a>
+								<a href="" ng-if="!item._id" ng-click="vm.save(item)">保存</a>
 							</td>
 						</tr>
 					<tbody>

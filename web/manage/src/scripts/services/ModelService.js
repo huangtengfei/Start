@@ -8,12 +8,33 @@ export default class ModelService {
 			list: { 
 				method: 'POST',
 				params: {
-					model: '',
-					id: ''
+					base: 'models',
+					model: ''
 				},
 				isArray: true
-			}	
+			},
+			create: {
+				method: 'POST',
+				params: {
+					base: 'models',
+					model: ''
+				}
+			},
+			remove: {
+				method: 'POST',
+				params: {
+					base: 'models',
+					model: '',
+					id: ''
+				}
+			},
+			removeAll: {
+				method: 'POST',
+				params: {
+					base: 'batch'
+				}
+			}
 		};
-		return this.$resource(this.urlPrefix + 'api/models/:model/:id', null, rest);
+		return this.$resource(this.urlPrefix + 'api/:base/:model/:id', null, rest);
 	}
 }
